@@ -3,7 +3,7 @@ import logging
 import asyncio
 from abc import ABCMeta, abstractmethod
 
-__version__ = "1.0"
+__all__ = ['Inbox', 'Actor']
 
 
 class Inbox(metaclass=ABCMeta):
