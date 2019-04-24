@@ -1,18 +1,19 @@
-# Folders
 .cache/
+.pytest_cache/
+.build/
+.tmp/
+
 .vscode/
-.idea
+.idea/
 
 **/__samples__/
 **/__pycache__/
 
-# Files
+htmlcov/
+
 .coverage
 *.pyc
 *~
 *.conf
 *.db
 *.orig
-Dockerfile
-manage.py
-check_*.py
