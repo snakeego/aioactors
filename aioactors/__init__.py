@@ -2,7 +2,7 @@ import asyncio
 from logging import getLogger
 from abc import abstractmethod, ABC
 
-__version__ = "1.0"
+__version__ = "1.0.0"
 __doc__ = "Simple abstractions for actor model based on asyncio"
 
 TASK_TIMEOUT = 5

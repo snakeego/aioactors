@@ -1,14 +1,10 @@
 #!/usr/bin/env python
 import re
-from setuptools import setup, find_packages
 from os import path as op
+from setuptools import setup, find_packages
 
-__version__ = "1.2"
-
-PACKAGES = find_packages(exclude=['tests'])
-NAME = PACKAGES[0]
-
-patterns = {
+NAME = find_packages(exclude=['tests'])[0]
+PATTERNS = {
     'version': re.compile(r'__version__ = [\'"]([^\'"]*)[\'"]'),
     'doc': re.compile(r'__doc__ = [\'"]([^\'"]*)[\'"]')
 }
@@ -16,7 +12,7 @@ patterns = {
 
 def extract(pattern, fname):
     result = ''
-    reg = re.compile(patterns[pattern])
+    reg = re.compile(PATTERNS[pattern])
     with open(fname, 'r') as fp:
         for line in fp:
             m = reg.match(line)
@@ -37,10 +33,7 @@ def get_readme(fname):
 
 
 setup(
-    name=NAME,
-    packages=PACKAGES,
     version=extract('version', "{}/__init__.py".format(NAME)),
     description=extract('doc', "{}/__init__.py".format(NAME)),
-    long_description=get_readme('README.md'),
-    install_requires=[]
+    long_description=get_readme('README.md')
 )
