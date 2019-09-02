@@ -1,19 +1,23 @@
+import typing as t
+
 import asyncio
 from logging import getLogger
 from abc import abstractmethod, ABC
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 __doc__ = "Simple abstractions for actor model based on asyncio"
 
 TASK_TIMEOUT = 5
 
 
 class Actor(ABC):
-    def __init__(self, **kwargs) -> None:
-        self.logger = getLogger(type(self).__name__)
+    def __new__(cls, *args, **kwargs):
+        obj = super().__new__(cls)
+        obj.logger = getLogger(cls.__name__)
         if '_id' in kwargs:
-            self.id = kwargs['_id']
-            self.logger = getLogger(f"{type(self).__name__}.{self.id}")
+            obj.id = kwargs['_id']
+            obj.logger = getLogger(f"{cls.__name__}.{obj.id}")
+        return obj
 
     @abstractmethod
     async def __call__(self) -> None:
@@ -30,6 +34,8 @@ class ActorSystem(object):
         self.logger = getLogger(type(self).__name__)
         self.loop = loop
 
+        self.tasks: t.List[asyncio.Coroutine] = list()
+
     def __call__(self):
         try:
             self.start()
@@ -38,7 +44,7 @@ class ActorSystem(object):
 
     def start(self) -> None:
         self.logger.info("Starting...")
-        self.loop.run_forever()
+        self.loop.run_until_complete(asyncio.gather(*self.tasks))
 
     def stop(self) -> None:
         self.logger.info("Stopping...")
@@ -52,4 +58,4 @@ class ActorSystem(object):
         self.loop.close()
 
     def add(self, task: Actor, timeout: int = TASK_TIMEOUT):
-        return asyncio.ensure_future(task.start(timeout))
+        self.tasks.append(task.start(timeout))
