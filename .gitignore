@@ -1,9 +1,11 @@
 .cache/
 .pytest_cache/
+.mypy_cache/
 .build/
 .tmp/
 
 .vscode/
+.devcontainer/
 .idea/
 
 **/__samples__/
@@ -12,8 +14,14 @@
 htmlcov/
 
 .coverage
+.notifier
 *.pyc
 *~
 *.conf
 *.db
 *.orig
+
+.config/*.json
+.config/*.yml
+!.config/*.sample.*
+configuration/
